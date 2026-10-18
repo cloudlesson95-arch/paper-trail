@@ -1,0 +1,290 @@
+[
+  {
+    "sample_id": "doc_000",
+    "type": "receipt",
+    "type_scores": {
+      "invoice": 0.0,
+      "letter": 0.0,
+      "order_form": 0.0,
+      "receipt": 1.0
+    },
+    "category": "travel",
+    "category_scores": {
+      "meals": 0.066,
+      "office_supplies": 0.0705,
+      "software": 0.0621,
+      "travel": 0.7158,
+      "utilities": 0.0856
+    },
+    "skew_deg": 0.0,
+    "blocks": 18,
+    "text": "Wilson Car Hire\n00557 Kelsey Track Apt. 932\nNew Cheryl, NC 90304\nTel (555) 642-1262\n--------------------------------------------------\nDate: May 7, 2026 Time: 15:11\nReceipt: RCPT-513537\n--------------------------------------------------\nTaxi fare $32.17\nTrain ticket return $92.49\nFuel unleaded $69.16\n4 x Car rental per day $211.92\n2 x Parking garage $29.08\n--------------------------------------------------\nSubtotal $434.82\nTax 0% $0.00\nTOTAL $434.82\nPaid in cash\n--------------------------------------------------\nThank you for shopping with us! Returns are\naccepted within 30 days with this receipt.",
+    "overlay": "/samples/doc_000_overlay.png",
+    "original": "/samples/doc_000_original.png",
+    "model": "gemini-3.1-flash-lite"
+  },
+  {
+    "sample_id": "doc_001",
+    "type": "letter",
+    "type_scores": {
+      "invoice": 0.0,
+      "letter": 1.0,
+      "order_form": 0.0,
+      "receipt": 0.0
+    },
+    "category": "meals",
+    "category_scores": {
+      "meals": 0.609,
+      "office_supplies": 0.085,
+      "software": 0.1035,
+      "travel": 0.0907,
+      "utilities": 0.1118
+    },
+    "skew_deg": -4.83,
+    "blocks": 12,
+    "text": "Davenport Catering\n956 Edward Glens, Leonardmouth, AR 34206\nTel (555) 744-8268 accounts@davenport.example\n\nAugust 22, 2025\n\nEllen Delgado\nBrightwater Design Studio\n48 Juniper Row\nMillbrook, OR 97001\n\nRe: Catering for your team event\nDear Ellen Delgado,\nThank you for choosing Davenport Catering to cater your team\nlunch on August 22, 2025. The menu covered sandwiches, salads,\npastries and drinks for the whole team.\nThe balance of $77.40 is now due. Please include reference\nINV-2025-5310 with your payment.\nIf you have any questions about this letter, please contact us at\naccounts@davenport.example.\n\nSincerely,\n\nAndrea Johnson\nAccounts Manager, Davenport Catering",
+    "overlay": "/samples/doc_001_overlay.png",
+    "original": "/samples/doc_001_original.png",
+    "model": "gemini-3.1-flash-lite"
+  },
+  {
+    "sample_id": "doc_002",
+    "type": "letter",
+    "type_scores": {
+      "invoice": 0.0001,
+      "letter": 0.9998,
+      "order_form": 0.0,
+      "receipt": 0.0
+    },
+    "category": "office_supplies",
+    "category_scores": {
+      "meals": 0.1056,
+      "office_supplies": 0.5715,
+      "software": 0.1081,
+      "travel": 0.0966,
+      "utilities": 0.1182
+    },
+    "skew_deg": -5.59,
+    "blocks": 11,
+    "text": "Gates Paper Company\n1788 Marissa Wells, New Josephshire, HI 96401\nTel (555) 656-2712 billing@gates.example\n2025-10-10\nSamuel Torres\nBrightwater Design Studio\n48 Juniper Row\nMillbrook, OR 97001\nRe: Your stationery order\nDear Samuel Torres,\nThank you for ordering office supplies from Gates Paper Company.\nYour order of printer paper, toner and filing materials was\ndispatched on 2025-10-10.\nThe amount of $62.86 has been charged to the account of\nBrightwater Design Studio. Please quote reference INV-2025-5957 if\nany item arrives damaged.\nIf you have any questions about this letter, please contact us at\nbilling@gates.example.\nSincerely,\nAmber Livingston\nBilling Coordinator, Gates Paper Company",
+    "overlay": "/samples/doc_002_overlay.png",
+    "original": "/samples/doc_002_original.png",
+    "model": "gemini-3.1-flash-lite"
+  },
+  {
+    "sample_id": "doc_003",
+    "type": "receipt",
+    "type_scores": {
+      "invoice": 0.0,
+      "letter": 0.0,
+      "order_form": 0.0,
+      "receipt": 0.9999
+    },
+    "category": "software",
+    "category_scores": {
+      "meals": 0.1126,
+      "office_supplies": 0.1194,
+      "software": 0.4832,
+      "travel": 0.1326,
+      "utilities": 0.1522
+    },
+    "skew_deg": -2.02,
+    "blocks": 12,
+    "text": "Gutierrez Cloud Services\n67245 Victor Fords Apt. 234\nPort Katherineland, FM 13906\nTel (555) 757-5318\n----------------------------------------\nDate: 07/16/2025 Time: 14:53\nReceipt: RCPT-578099\n----------------------------------------\nPriority support plan $98.01\n2 x Project tracker seat $20.44\n4 x Antivirus suite $301.08\n----------------------------------------\nSubtotal $419.53\nTax 20% $83.91\nTOTAL $503.44\nPaid in cash\n----------------------------------------\nThank you for shopping with us! Returns are\naccepted within 30 days with this receipt.",
+    "overlay": "/samples/doc_003_overlay.png",
+    "original": "/samples/doc_003_original.png",
+    "model": "gemini-3.1-flash-lite"
+  },
+  {
+    "sample_id": "doc_004",
+    "type": "receipt",
+    "type_scores": {
+      "invoice": 0.0,
+      "letter": 0.0002,
+      "order_form": 0.0001,
+      "receipt": 0.9997
+    },
+    "category": "utilities",
+    "category_scores": {
+      "meals": 0.0843,
+      "office_supplies": 0.0914,
+      "software": 0.0754,
+      "travel": 0.0834,
+      "utilities": 0.6656
+    },
+    "skew_deg": 7.85,
+    "blocks": 14,
+    "text": "Parks Water Works\n1924 Hopkins River\nEast Jacksonville, WY 51072\nTel (555) 347-9822\n----------------------------------------\nDate: 2025-07-10 Time: 13:32\nReceipt: RCPT-570243\n----------------------------------------\nWater service charge $40.47\nElectricity usage $192.87\nMeter service fee $18.35\nService fee $3.00\n----------------------------------------\nSubtotal $254.69\nTax 10% $25.47\nTOTAL $280.16\nPaid by card ending 8526\n----------------------------------------\nThank you for shopping with us! Returns are\naccepted within 30 days with this receipt.",
+    "overlay": "/samples/doc_004_overlay.png",
+    "original": "/samples/doc_004_original.png",
+    "model": "gemini-3.1-flash-lite"
+  },
+  {
+    "sample_id": "doc_005",
+    "type": "letter",
+    "type_scores": {
+      "invoice": 0.0,
+      "letter": 0.9999,
+      "order_form": 0.0,
+      "receipt": 0.0
+    },
+    "category": "meals",
+    "category_scores": {
+      "meals": 0.7125,
+      "office_supplies": 0.0649,
+      "software": 0.0688,
+      "travel": 0.075,
+      "utilities": 0.0788
+    },
+    "skew_deg": -4.69,
+    "blocks": 15,
+    "text": "Humphrey Deli\n890 Suzanne Station, North Donnahaven, WA 36196\nTel (555) 438-7566 accounts@humphrey.example\n2 Feb 2026\nVictoria Riley\nBrightwater Design Studio\n48 Juniper Row\nMillbrook, OR 97001\nRe: Catering for your team event\nDear Victoria Riley,\nThank you for choosing Humphrey Deli to cater your team lunch\non 2 Feb 2026. The menu covered sandwiches, salads, pastries and\ndrinks for the whole team.\nThe balance of $165.60 is now due. Please include reference\nINV-2026-4180 with your payment.\nShould you need a copy of the original invoice, write to\naccounts@humphrey.example and we will send it.\nSincerely,\nJessica Scott\nAccounts Manager, Humphrey Deli",
+    "overlay": "/samples/doc_005_overlay.png",
+    "original": "/samples/doc_005_original.png",
+    "model": "gemini-3.1-flash-lite"
+  },
+  {
+    "sample_id": "doc_006",
+    "type": "invoice",
+    "type_scores": {
+      "invoice": 0.9998,
+      "letter": 0.0001,
+      "order_form": 0.0,
+      "receipt": 0.0
+    },
+    "category": "utilities",
+    "category_scores": {
+      "meals": 0.1038,
+      "office_supplies": 0.0863,
+      "software": 0.1318,
+      "travel": 0.1214,
+      "utilities": 0.5567
+    },
+    "skew_deg": 1.7,
+    "blocks": 17,
+    "text": "INVOICE\nWilliams Power and Light\n215 Burgess Well Apt. 851\nReynoldstown, NM 94804\nhello@williams.example\nInvoice No: INV-2025-7327\nInvoice date: 2025-08-01\nDue date: 2025-08-31\nBill to: Samuel Torres\nBrightwater Design Studio\n48 Juniper Row, Millbrook, OR 97001\nDescription Qty Unit price Amount\nMeter service fee 1 $11.83 $11.83\nGas supply 1 $137.02 $137.02\nElectricity usage 1 $276.04 $276.04\nBusiness internet plan 1 $103.97 $103.97\nSubtotal $528.86\nTax 8% $42.31\nTotal due $571.17\nPayment is due within 30 days of the invoice date. Please quote the\ninvoice number with your payment. Questions about this invoice?\nWrite to hello@williams.example.",
+    "overlay": "/samples/doc_006_overlay.png",
+    "original": "/samples/doc_006_original.png",
+    "model": "gemini-3.1-flash-lite"
+  },
+  {
+    "sample_id": "doc_007",
+    "type": "invoice",
+    "type_scores": {
+      "invoice": 0.9993,
+      "letter": 0.0005,
+      "order_form": 0.0001,
+      "receipt": 0.0
+    },
+    "category": "utilities",
+    "category_scores": {
+      "meals": 0.0969,
+      "office_supplies": 0.0759,
+      "software": 0.118,
+      "travel": 0.0956,
+      "utilities": 0.6136
+    },
+    "skew_deg": 4.93,
+    "blocks": 15,
+    "text": "INVOICE\nWilliams Power and Light\n215 Burgess Well Apt. 851\nReynoldstown, NM 94804\nhello@williams.example\nInvoice No: INV-2026-4215\nInvoice date: 02/02/2026\nDue date: 02/16/2026\nBill to: Victoria Riley\nBrightwater Design Studio\n48 Juniper Row, Millbrook, OR 97001\nDescription Qty Unit price Amount\nBusiness internet plan 1 $118.07 $118.07\nGas supply 1 $103.21 $103.21\nMeter service fee 1 $10.08 $10.08\nWater service charge 1 $88.85 $88.85\nElectricity usage 1 $271.81 $271.81\nSubtotal $592.02\nTax 8% $47.36\nTotal due $639.38\nPayment is due within 30 days of the invoice date. Please quote the\ninvoice number with your payment. Questions about this invoice?\nWrite to hello@williams.example.",
+    "overlay": "/samples/doc_007_overlay.png",
+    "original": "/samples/doc_007_original.png",
+    "model": "gemini-3.1-flash-lite"
+  },
+  {
+    "sample_id": "doc_008",
+    "type": "order_form",
+    "type_scores": {
+      "invoice": 0.0002,
+      "letter": 0.0001,
+      "order_form": 0.9995,
+      "receipt": 0.0002
+    },
+    "category": "meals",
+    "category_scores": {
+      "meals": 0.3915,
+      "office_supplies": 0.1803,
+      "software": 0.1709,
+      "travel": 0.1401,
+      "utilities": 0.1173
+    },
+    "skew_deg": 2.4,
+    "blocks": 14,
+    "text": "PURCHASE ORDER FORM\nOrder No: PO-72794\nOrder date: April 24, 2026\nDelivery by: May 24, 2026\nSupplier: Davenport Catering\nSupplier email: accounts@davenport.example\nOrdered by: Ellen Delgado\nCompany: Brightwater Design Studio\nCode Description Qty Unit price Line total\nB-720 Bottled water 12 $1.27 $15.24\nF-191 Catering platter 1 $143.42 $143.42\nC-203 Coffee large 1 $2.02 $2.02\nOrder total: $160.68\nStandard delivery Express delivery\nAuthorised signature Date",
+    "overlay": "/samples/doc_008_overlay.png",
+    "original": "/samples/doc_008_original.png",
+    "model": "gemini-3.1-flash-lite"
+  },
+  {
+    "sample_id": "doc_009",
+    "type": "order_form",
+    "type_scores": {
+      "invoice": 0.0001,
+      "letter": 0.0,
+      "order_form": 0.9999,
+      "receipt": 0.0
+    },
+    "category": "meals",
+    "category_scores": {
+      "meals": 0.3961,
+      "office_supplies": 0.1973,
+      "software": 0.1647,
+      "travel": 0.1387,
+      "utilities": 0.1032
+    },
+    "skew_deg": -6.03,
+    "blocks": 14,
+    "text": "PURCHASE ORDER FORM\nOrder No: PO-28598\nOrder date: 9 Oct 2025\nDelivery by: 8 Nov 2025\nSupplier: Reyes Bistro\nSupplier email: orders@reyes.example\nOrdered by: Rachel Moore\nCompany: Brightwater Design Studio\nCode Description Qty Unit price Line total\nH-182 Garden salad 1 $9.65 $9.65\nA-881 Bottled water 7 $1.69 $11.83\nOrder total: $21.48\nStandard delivery Express delivery\nAuthorised signature Date",
+    "overlay": "/samples/doc_009_overlay.png",
+    "original": "/samples/doc_009_original.png",
+    "model": "gemini-3.1-flash-lite"
+  },
+  {
+    "sample_id": "doc_010",
+    "type": "order_form",
+    "type_scores": {
+      "invoice": 0.0001,
+      "letter": 0.0001,
+      "order_form": 0.9998,
+      "receipt": 0.0
+    },
+    "category": "office_supplies",
+    "category_scores": {
+      "meals": 0.0911,
+      "office_supplies": 0.5947,
+      "software": 0.1273,
+      "travel": 0.1072,
+      "utilities": 0.0797
+    },
+    "skew_deg": 0.37,
+    "blocks": 16,
+    "text": "PURCHASE ORDER FORM\nOrder No: PO-73381\nOrder date: 21 Sep 2025\nDelivery by: 21 Oct 2025\nSupplier: Allen Stationers\nSupplier email: billing@allen.example\nOrdered by: Ellen Delgado\nCompany: Brightwater Design Studio\nCode Description Qty Unit price Line total\nF-152 Printer paper A4 ream 4 $8.99 $35.96\nH-961 Stapler heavy duty 1 $15.81 $15.81\nH-294 Ballpoint pens box 5 $10.44 $52.20\nD-271 Delivery charge 1 $18.40 $18.40\nOrder total: $122.37\nStandard delivery Express delivery\nAuthorised signature Date",
+    "overlay": "/samples/doc_010_overlay.png",
+    "original": "/samples/doc_010_original.png",
+    "model": "gemini-3.1-flash-lite"
+  },
+  {
+    "sample_id": "doc_016",
+    "type": "invoice",
+    "type_scores": {
+      "invoice": 0.9987,
+      "letter": 0.0002,
+      "order_form": 0.0007,
+      "receipt": 0.0003
+    },
+    "category": "travel",
+    "category_scores": {
+      "meals": 0.1064,
+      "office_supplies": 0.0898,
+      "software": 0.1059,
+      "travel": 0.6022,
+      "utilities": 0.0957
+    },
+    "skew_deg": -5.44,
+    "blocks": 17,
+    "text": "INVOICE\nOrtiz Car Hire\n97738 Pearson Mountains Suite 103\nNorth William, OK 73118\naccounts@ortiz.example\nInvoice No: INV-2025-0625\nInvoice date: 06.08.2025\nDue date: 05.09.2025\nBill to: Victoria Riley\nBrightwater Design Studio\n48 Juniper Row, Millbrook, OR 97001\nDescription Qty Unit price Amount\nTaxi fare 1 $22.35 $22.35\nTrain ticket return 1 $137.77 $137.77\nAirport shuttle 2 $27.97 $55.94\nHotel night standard room 2 $191.98 $383.96\nFuel unleaded 1 $56.40 $56.40\nSubtotal $656.42\nTax 8% $52.51\nTotal due $708.93\nPayment is due within 30 days of the invoice date. Please quote the\ninvoice number with your payment. Questions about this invoice?\nWrite to accounts@ortiz.example.",
+    "overlay": "/samples/doc_016_overlay.png",
+    "original": "/samples/doc_016_original.png",
+    "model": "gemini-3.1-flash-lite"
+  }
+]
