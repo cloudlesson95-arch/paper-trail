@@ -19,9 +19,13 @@ from common import DOCS, write_json
 
 SEED = 20261018
 N_DOCS = 120
+HARD_PER_TYPE = 10  # the first documents of each type also get a harder scan, for the OCR comparison
 TYPES = ["receipt", "invoice", "letter", "order_form"]
 CATEGORIES = ["office_supplies", "travel", "meals", "utilities", "software"]
-CUSTOMER = "Brightwater Design Studio"
+CUSTOMER = "Brightwater Design Studio"  # the small business whose paperwork this is
+STAFF_SIZE = 4
+VENDORS_PER_CATEGORY = 4
+VENDOR_WEIGHTS = [5, 3, 2, 1]  # some vendors are used much more often than others
 CUSTOMER_STREET = "48 Juniper Row"
 CUSTOMER_CITY = "Millbrook, OR 97001"
 
@@ -227,13 +231,30 @@ class Canvas:
             self.draw.line([(x + 4, y + 12), (x + 9, y + 18), (x + 17, y + 5)], fill=self.ink, width=3)
 
 
-def make_record(i: int, doc_type: str, category: str, fake: Faker, rng: random.Random) -> dict:
-    """Choose the content of one document: vendor, items, dates, ids and people."""
-    surname = fake.last_name()
-    vendor = f"{surname} {rng.choice(VENDOR_KINDS[category])}"
-    slug = re.sub(r"[^a-z]+", "", surname.lower())
-    issued = date(2025, 7, 1) + timedelta(days=rng.randrange(365))
+def make_vendors(fake: Faker, rng: random.Random) -> dict[str, list[dict]]:
+    """A few recurring vendors per category, each with fixed contact details."""
+    vendors = {}
+    for category, kinds in VENDOR_KINDS.items():
+        vendors[category] = []
+        for _ in range(VENDORS_PER_CATEGORY):
+            surname = fake.unique.last_name()
+            slug = re.sub(r"[^a-z]+", "", surname.lower())
+            vendors[category].append({
+                "vendor": f"{surname} {rng.choice(kinds)}",
+                "email": f"{rng.choice(['billing', 'accounts', 'hello', 'orders'])}@{slug}.example",
+                "street": fake.street_address(),
+                "city": f"{fake.city()}, {fake.state_abbr(include_territories=False)} {fake.zipcode()}",
+                "phone": f"(555) {rng.randint(200, 999)}-{rng.randint(1000, 9999)}",
+                "signer": f"{fake.first_name()} {fake.last_name()}",
+                "signer_title": rng.choice(SIGNER_TITLES),
+            })
+    return vendors
 
+
+def make_record(i: int, doc_type: str, category: str, vendor: dict, person: str,
+                rng: random.Random) -> dict:
+    """Choose the content of one document: items, amounts, dates and numbers."""
+    issued = date(2025, 7, 1) + timedelta(days=rng.randrange(365))
     pool = ITEMS[category]
     picks = rng.sample(pool, rng.randint(2, min(5, len(pool))))
     if rng.random() < 0.3:
@@ -248,16 +269,11 @@ def make_record(i: int, doc_type: str, category: str, fake: Faker, rng: random.R
     tax = round(subtotal * tax_rate / 100, 2)
 
     return {
+        **vendor,
         "id": f"doc_{i:03d}",
         "type": doc_type,
         "category": category,
-        "vendor": vendor,
-        "email": f"{rng.choice(['billing', 'accounts', 'hello', 'orders'])}@{slug}.example",
-        "street": fake.street_address(),
-        "city": f"{fake.city()}, {fake.state_abbr(include_territories=False)} {fake.zipcode()}",
-        "phone": f"(555) {rng.randint(200, 999)}-{rng.randint(1000, 9999)}",
-        "person": f"{fake.first_name()} {fake.last_name()}",
-        "signer": f"{fake.first_name()} {fake.last_name()}",
+        "person": person,
         "issued": issued,
         "due": issued + timedelta(days=rng.choice([14, 30])),
         "date_style": rng.choice(["iso", "dmy", "us", "long", "eu"]),
@@ -270,11 +286,8 @@ def make_record(i: int, doc_type: str, category: str, fake: Faker, rng: random.R
         "order_no": f"PO-{rng.randint(10000, 99999)}",
         "receipt_no": f"RCPT-{rng.randint(100000, 999999)}",
         "time": f"{rng.randint(8, 20):02d}:{rng.randint(0, 59):02d}",
-        "payment": rng.choice(
-            [f"Paid by card ending {rng.randint(1000, 9999)}", "Paid in cash"]
-        ),
+        "payment": rng.choice([f"Paid by card ending {rng.randint(1000, 9999)}", "Paid in cash"]),
         "closing": rng.choice(CLOSINGS),
-        "signer_title": rng.choice(SIGNER_TITLES),
     }
 
 
@@ -432,13 +445,23 @@ def render_order_form(r: dict, c: Canvas, rng: random.Random) -> tuple[int, str]
     return y, r["order_no"]
 
 
-def degrade(img: Image.Image, rng: random.Random, nrng: np.random.Generator) -> tuple[Image.Image, float]:
-    """Simulate a scan: rotation within +-8 degrees, blur, uneven lighting and noise."""
+def degrade(img: Image.Image, rng: random.Random, nrng: np.random.Generator,
+            hard: bool = False) -> tuple[Image.Image, float]:
+    """Simulate a scan: rotation, blur, uneven lighting and noise.
+
+    The standard setting rotates within +-8 degrees. The hard one rotates 12 to 25
+    degrees either way, scans at 60% resolution and adds more blur and noise.
+    """
     paper = rng.randint(238, 252)
-    angle = round(rng.uniform(-8, 8), 2)
+    if hard:
+        angle = round(rng.choice([-1, 1]) * rng.uniform(12, 25), 2)
+    else:
+        angle = round(rng.uniform(-8, 8), 2)
     img = Image.eval(img, lambda v: int(v * paper / 255))
     img = img.rotate(angle, resample=Image.Resampling.BICUBIC, expand=True, fillcolor=paper)
-    img = img.filter(ImageFilter.GaussianBlur(rng.uniform(0.3, 1.1)))
+    if hard:
+        img = img.resize((int(img.width * 0.6), int(img.height * 0.6)), Image.Resampling.LANCZOS)
+    img = img.filter(ImageFilter.GaussianBlur(rng.uniform(0.6, 1.0) if hard else rng.uniform(0.3, 1.1)))
 
     arr = np.asarray(img, dtype=np.float32)
     h, w = arr.shape
@@ -447,7 +470,7 @@ def degrade(img: Image.Image, rng: random.Random, nrng: np.random.Generator) -> 
     ramp = np.cos(theta) * xx / w + np.sin(theta) * yy / h
     ramp = (ramp - ramp.min()) / (ramp.max() - ramp.min())
     arr *= 1 - rng.uniform(0.1, 0.35) * ramp
-    arr += nrng.normal(0, rng.uniform(3, 9), arr.shape)
+    arr += nrng.normal(0, rng.uniform(6, 12) if hard else rng.uniform(3, 9), arr.shape)
     return Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8)), angle
 
 
@@ -479,10 +502,16 @@ def main() -> None:
     categories = [CATEGORIES[i % len(CATEGORIES)] for i in range(N_DOCS)]
     rng.shuffle(types)
     rng.shuffle(categories)
+    vendors = make_vendors(fake, rng)
+    staff = [f"{fake.first_name()} {fake.last_name()}" for _ in range(STAFF_SIZE)]
 
-    DOCS.mkdir(parents=True, exist_ok=True)
+    # A separate random stream, so the hard scans leave the standard documents unchanged.
+    hard_rng, hard_nrng = random.Random(SEED + 1), np.random.default_rng(SEED + 1)
+    (DOCS / "hard").mkdir(parents=True, exist_ok=True)
+    hard_counts = dict.fromkeys(TYPES, 0)
     for i, (doc_type, category) in enumerate(zip(types, categories)):
-        r = make_record(i, doc_type, category, fake, rng)
+        vendor = rng.choices(vendors[category], weights=VENDOR_WEIGHTS)[0]
+        r = make_record(i, doc_type, category, vendor, rng.choice(staff), rng)
         clean, text, entities, number = render(r, rng)
         scan, angle = degrade(clean, rng, nrng)
         scan.save(DOCS / f"{r['id']}.png", optimize=True)
@@ -498,7 +527,12 @@ def main() -> None:
             "text": text,
             "entities": entities,
         })
-    print(f"Wrote {N_DOCS} documents to {DOCS}")
+        if hard_counts[doc_type] < HARD_PER_TYPE:
+            hard_counts[doc_type] += 1
+            hard, hard_angle = degrade(clean, hard_rng, hard_nrng, hard=True)
+            hard.save(DOCS / "hard" / f"{r['id']}.png", optimize=True)
+            write_json(DOCS / "hard" / f"{r['id']}.json", {"rotation": hard_angle})
+    print(f"Wrote {N_DOCS} documents and {sum(hard_counts.values())} hard scans to {DOCS}")
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ import pytest
 from faker import Faker
 from PIL import Image
 
-from generate import make_record, render
+from generate import make_record, make_vendors, render
 from vision import deskew, skew_angle, text_blocks
 
 
@@ -13,12 +13,13 @@ def clean_page(doc_type: str) -> Image.Image:
     fake = Faker("en_US")
     fake.seed_instance(1)
     rng = random.Random(1)
-    img, *_ = render(make_record(0, doc_type, "travel", fake, rng), rng)
+    vendor = make_vendors(fake, rng)["travel"][0]
+    img, *_ = render(make_record(0, doc_type, "travel", vendor, "Jane Doe", rng), rng)
     return img
 
 
 @pytest.mark.parametrize("doc_type", ["receipt", "invoice", "letter", "order_form"])
-@pytest.mark.parametrize("angle", [-7.5, -3.0, 0.0, 2.2, 6.0])
+@pytest.mark.parametrize("angle", [-20.0, -7.5, -3.0, 0.0, 2.2, 6.0, 15.0])
 def test_deskew_recovers_known_rotation(doc_type, angle):
     page = clean_page(doc_type)
     rotated = page.rotate(angle, resample=Image.Resampling.BICUBIC, expand=True, fillcolor=255)

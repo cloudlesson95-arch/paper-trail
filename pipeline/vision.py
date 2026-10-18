@@ -9,7 +9,7 @@ import cv2
 import numpy as np
 from PIL import Image
 
-from common import DOCS, RESULTS, SAMPLES, VISION, ground_truth, write_json
+from common import DOCS, RESULTS, SAMPLES, VISION, ground_truth, read_json, write_json
 
 HOG_SIZE = (128, 160)  # width, height of the image the HOG descriptor sees
 HOG = cv2.HOGDescriptor(HOG_SIZE, (32, 32), (16, 16), (16, 16), 9)
@@ -61,7 +61,10 @@ def skew_angle(gray: np.ndarray) -> float:
         middle = np.searchsorted(cumulative, cumulative[-1] / 2)
         return float(np.asarray(angles)[order][middle])
     points = cv2.findNonZero(bw)
-    return rect_angle(cv2.minAreaRect(points)) if points is not None else 0.0
+    if points is None:
+        return 0.0
+    # The ink's bounding rectangle is the page's, so its angle is only known modulo 90.
+    return (rect_angle(cv2.minAreaRect(points)) + 45) % 90 - 45
 
 
 def rotate(gray: np.ndarray, angle: float) -> np.ndarray:
@@ -147,10 +150,22 @@ def main() -> None:
             save_small(SAMPLES / f"{d['id']}_deskewed.png", straight)
             save_small(SAMPLES / f"{d['id']}_overlay.png", overlay(straight, boxes))
 
-    mae, worst = float(np.mean(errors)), float(np.max(errors))
-    write_json(RESULTS / "deskew.json", {"mae_degrees": mae, "max_error_degrees": worst})
+    hard_errors = []
+    (VISION / "hard").mkdir(exist_ok=True)
+    for path in sorted((DOCS / "hard").glob("doc_*.png")):
+        straight, angle = deskew(cv2.imread(str(path), cv2.IMREAD_GRAYSCALE))
+        cv2.imwrite(str(VISION / "hard" / path.name), straight)
+        hard_errors.append(abs(angle - read_json(path.with_suffix(".json"))["rotation"]))
+
+    summary = {
+        setting: {"documents": len(errs), "mae_degrees": float(np.mean(errs)), "max_error_degrees": float(np.max(errs))}
+        for setting, errs in (("standard", errors), ("hard", hard_errors))
+    }
+    write_json(RESULTS / "deskew.json", summary)
     print(f"Processed {len(docs)} documents; {len(gallery)} gallery samples in {SAMPLES}")
-    print(f"Deskew angle error: mean {mae:.2f} deg, max {worst:.2f} deg")
+    for setting, row in summary.items():
+        print(f"Deskew angle error ({setting}, {row['documents']} scans): "
+              f"mean {row['mae_degrees']:.2f} deg, max {row['max_error_degrees']:.2f} deg")
 
 
 if __name__ == "__main__":
