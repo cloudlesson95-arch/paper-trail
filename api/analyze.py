@@ -16,6 +16,7 @@ import base64
 import json
 import os
 import re
+import sys
 import threading
 import time
 from collections import defaultdict, deque
@@ -162,19 +163,26 @@ _client = None
 def ocr(png: bytes) -> str:
     global _client
     from google import genai
-    from google.genai import types
+    from google.genai import errors, types
 
     if _client is None:
-        # Time out well inside the function's maxDuration; a failure falls back to the cache.
+        # A hung call times out and the request falls back to the cache.
         _client = genai.Client(api_key=os.environ["GOOGLE_API_KEY"], http_options=types.HttpOptions(timeout=25_000))
-    response = _client.models.generate_content(
-        model=MODEL,
-        contents=[types.Part.from_bytes(data=png, mime_type="image/png"), PROMPT],
-        config=types.GenerateContentConfig(
-            automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True)
-        ),
-    )
-    return response.text or ""
+    for attempt in range(2):  # Gemini's 5xx ("overloaded") is usually gone a moment later
+        try:
+            response = _client.models.generate_content(
+                model=MODEL,
+                contents=[types.Part.from_bytes(data=png, mime_type="image/png"), PROMPT],
+                config=types.GenerateContentConfig(
+                    automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True)
+                ),
+            )
+            return response.text or ""
+        except errors.ServerError:
+            if attempt:
+                raise
+            time.sleep(2)
+    return ""
 
 
 # ---- Limits --------------------------------------------------------------------------------
@@ -247,6 +255,7 @@ def analyze(body: bytes, ip: str, now: float | None = None, read_text=None) -> t
         text = (read_text or ocr)(cv2.imencode(".png", straight)[1].tobytes())
         category_scores = scores(CATEGORY, tfidf(CATEGORY, text))
     except Exception as e:  # any failure, including Gemini errors and quota
+        print(f"analysis failed: {e!r}"[:500], file=sys.stderr)
         return cached(f"Live analysis failed ({type(e).__name__}). Showing a cached example instead.")
 
     preview = cv2.cvtColor(straight, cv2.COLOR_GRAY2BGR)
