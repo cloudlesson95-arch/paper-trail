@@ -1,26 +1,109 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #898781;
+  --line: #e1e0d9;
+  --axis: #c3c2b7;
+  --accent: #2a78d6;
+  --heat: 42 120 214; /* sequential blue, as an RGB triplet for alpha steps */
+  --notice-bg: #fff6e0;
+  --notice-line: #fab219;
+  --error-bg: #fdecec;
+  --error-line: #d03b3b;
+  /* entity types, in the categorical palette's fixed order */
+  --ent-org: #2a78d6;
+  --ent-person: #eb6834;
+  --ent-date: #1baf7a;
+  --ent-money: #eda100;
+  --ent-doc-id: #e87ba4;
+  --ent-email: #008300;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --ink: #f0efec;
+    --ink-2: #c3c2b7;
+    --line: #2c2c2a;
+    --axis: #383835;
+    --accent: #3987e5;
+    --heat: 57 135 229;
+    --notice-bg: #2e2510;
+    --error-bg: #301717;
+    --ent-org: #3987e5;
+    --ent-person: #d95926;
+    --ent-date: #199e70;
+    --ent-money: #c98500;
+    --ent-doc-id: #d55181;
+    --ent-email: #008300;
   }
 }
 
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --ink: #f0efec;
+  --ink-2: #c3c2b7;
+  --line: #2c2c2a;
+  --axis: #383835;
+  --accent: #3987e5;
+  --heat: 57 135 229;
+  --notice-bg: #2e2510;
+  --error-bg: #301717;
+  --ent-org: #3987e5;
+  --ent-person: #d95926;
+  --ent-date: #199e70;
+  --ent-money: #c98500;
+  --ent-doc-id: #d55181;
+  --ent-email: #008300;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-axis: var(--axis);
+  --color-accent: var(--accent);
+  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--page);
+  color: var(--ink);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+mark.entity {
+  color: inherit;
+  background: color-mix(in srgb, var(--ent) 22%, transparent);
+  border-bottom: 2px solid var(--ent);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+mark.hit {
+  color: inherit;
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: 2px;
 }
