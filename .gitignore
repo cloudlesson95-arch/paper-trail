@@ -1,0 +1,26 @@
+# Written by jobagent; add what the project needs.
+START-HERE.md
+PLAN.md
+CLAUDE.md
+.env
+.env.*
+!.env.example
+node_modules/
+.venv/
+.vercel/
+
+# Project
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+__pycache__/
+*.pyc
+.pytest_cache/
+pipeline/cache/
+pipeline/out/
+/coverage
+/build
+*.pem
+npm-debug.log*
+.DS_Store

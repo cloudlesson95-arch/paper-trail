@@ -1,0 +1,10 @@
+START-HERE.md
+PLAN.md
+CLAUDE.md
+.env
+.env.*
+!.env.example
+.venv
+pipeline/
+node_modules
+.next
